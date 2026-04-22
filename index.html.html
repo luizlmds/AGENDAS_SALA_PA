@@ -63,32 +63,14 @@
     .room-tab { padding: 8px 18px; border: 1.5px solid #ddd; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; color: #555; transition: all 0.2s; }
     .room-tab.active { border-color: var(--pa-green); background: var(--pa-light-green); color: var(--pa-green); }
 
-    /* TIME PICKER FIELDS */
-    .time-picker-wrap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
+    /* TIME PICKER */
+    .time-picker-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
     .time-picker-group { display: flex; flex-direction: column; gap: 6px; }
-    .time-picker-group label {
-      font-size: 12px; font-weight: 600; color: #555;
-      text-transform: uppercase; letter-spacing: 0.4px;
-      display: flex; align-items: center; gap: 6px;
-    }
+    .time-picker-group label { font-size: 12px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.4px; }
     .time-picker-group input[type="time"] {
-      padding: 12px 14px;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--pa-dark);
-      outline: none;
-      transition: all 0.2s;
-      width: 100%;
-      background: white;
-      text-align: center;
-      letter-spacing: 1px;
+      padding: 12px 14px; border: 2px solid #ddd; border-radius: 10px;
+      font-size: 20px; font-weight: 700; color: var(--pa-dark); outline: none;
+      transition: all 0.2s; width: 100%; background: white; text-align: center; letter-spacing: 1px;
     }
     .time-picker-group input[type="time"]:focus { border-color: var(--pa-green); box-shadow: 0 0 0 3px rgba(74,157,63,0.1); }
     .time-picker-group input[type="time"].has-value { border-color: var(--pa-green); background: var(--pa-light-green); color: var(--pa-green); }
@@ -97,91 +79,36 @@
     .time-error.show { display: block; }
 
     /* SLOT BUTTONS */
-    .divider-label {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 0.6px;
-      margin: 20px 0 16px;
-    }
+    .divider-label { display: flex; align-items: center; gap: 10px; font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 0.6px; margin: 20px 0 16px; }
     .divider-label::before, .divider-label::after { content:''; flex:1; height:1px; background:#eee; }
-
-    .slots-section-label {
-      font-size: 12px; font-weight: 600; color: #555;
-      text-transform: uppercase; letter-spacing: 0.5px;
-      margin-bottom: 12px;
-    }
-    .slots-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-      gap: 8px;
-    }
+    .slots-section-label { font-size: 12px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+    .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
     .slot-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      border-radius: 10px;
-      border: 2px solid #ddd;
-      background: white;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 700;
-      color: #666;
-      transition: all 0.18s ease;
-      line-height: 1.2;
-      padding: 6px 4px;
-      user-select: none;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      width: 100%; aspect-ratio: 1/1; border-radius: 10px; border: 2px solid #ddd;
+      background: white; cursor: pointer; font-size: 13px; font-weight: 700; color: #666;
+      transition: all 0.18s ease; line-height: 1.2; padding: 6px 4px; user-select: none;
     }
-    .slot-btn .slot-sub {
-      font-size: 9px; font-weight: 500; opacity: 0.75; margin-top: 3px;
-    }
-    .slot-btn .slot-tag {
-      font-size: 8px; font-weight: 800; letter-spacing: 0.5px;
-      text-transform: uppercase; margin-top: 3px;
-    }
+    .slot-btn .slot-sub { font-size: 9px; font-weight: 500; opacity: 0.75; margin-top: 3px; }
+    .slot-btn .slot-tag { font-size: 8px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 3px; }
+    .slot-btn.available { border-color: #c5e0c1; background: var(--pa-light-green); color: #2a6e22; }
+    .slot-btn.available:hover { border-color: var(--pa-green); background: #c0deba; transform: scale(1.06); box-shadow: 0 3px 10px rgba(74,157,63,0.2); }
+    .slot-btn.booked { border-color: #fca5a5; background: #fef2f2; color: #b91c1c; cursor: not-allowed; }
+    .slot-btn.in-range { border-color: var(--pa-green); background: #b7ddb3; color: #1a5c13; }
+    .slot-btn.selected-start { border-color: var(--pa-green); background: var(--pa-green); color: white; box-shadow: 0 0 0 3px rgba(74,157,63,0.3); transform: scale(1.05); }
+    .slot-btn.selected-end { border-color: #237a1b; background: #237a1b; color: white; box-shadow: 0 0 0 3px rgba(35,122,27,0.3); transform: scale(1.05); }
 
-    .slot-btn.available {
-      border-color: #c5e0c1; background: var(--pa-light-green); color: #2a6e22;
-    }
-    .slot-btn.available:hover {
-      border-color: var(--pa-green); background: #c0deba;
-      transform: scale(1.06);
-      box-shadow: 0 3px 10px rgba(74,157,63,0.2);
-    }
-    .slot-btn.booked {
-      border-color: #fca5a5; background: #fef2f2; color: #b91c1c;
-      cursor: not-allowed;
-    }
-    .slot-btn.in-range {
-      border-color: var(--pa-green); background: #b7ddb3; color: #1a5c13;
-    }
-    .slot-btn.selected-start {
-      border-color: var(--pa-green); background: var(--pa-green); color: white;
-      box-shadow: 0 0 0 3px rgba(74,157,63,0.3);
-      transform: scale(1.05);
-    }
-    .slot-btn.selected-end {
-      border-color: #237a1b; background: #237a1b; color: white;
-      box-shadow: 0 0 0 3px rgba(35,122,27,0.3);
-      transform: scale(1.05);
-    }
-
-    /* LEGEND */
     .legend { display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
     .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #666; }
     .legend-dot { width: 14px; height: 14px; border-radius: 4px; }
 
-    /* SEL INFO */
     .sel-info { margin-top: 16px; padding: 14px 16px; background: var(--pa-light-green); border-radius: 8px; border: 1.5px solid var(--pa-green); font-size: 13px; color: var(--pa-dark); display: none; }
     .sel-info.show { display: block; }
 
-    /* BUTTONS */
     .btn-primary { background: var(--pa-green); color: white; border: none; padding: 11px 28px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; width: 100%; margin-top: 8px; }
     .btn-primary:hover { background: #3a8030; }
     .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
 
-    /* MODALS */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
     .modal { background: white; border-radius: 12px; padding: 28px; width: 360px; max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
@@ -193,7 +120,6 @@
     .btn-confirm { flex: 1; padding: 9px; border: none; border-radius: 8px; background: var(--pa-green); color: white; cursor: pointer; font-size: 13px; font-weight: 600; }
     .error-msg { font-size: 12px; color: #dc2626; margin-top: -8px; margin-bottom: 8px; }
 
-    /* SUCCESS */
     .success-box { background: var(--pa-light-green); border: 1.5px solid var(--pa-green); border-radius: 10px; padding: 20px; text-align: center; display: none; margin-bottom: 16px; }
     .success-box.show { display: block; }
     .success-box h3 { font-size: 16px; font-weight: 700; color: var(--pa-green); margin-bottom: 6px; }
@@ -203,6 +129,13 @@
 
     .required-note { font-size: 11px; color: #888; margin-bottom: 16px; }
     .hint { font-size: 12px; color: #666; margin-bottom: 16px; background: #fffbea; border: 1px solid #f0d080; border-radius: 6px; padding: 8px 12px; }
+
+    /* Loading overlay */
+    .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.8); z-index: 200; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+    .loading-overlay.show { display: flex; }
+    .spinner { width: 36px; height: 36px; border: 4px solid #eee; border-top-color: var(--pa-green); border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 13px; color: #555; font-weight: 500; }
 
     /* ADMIN */
     .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
@@ -236,6 +169,12 @@
   </style>
 </head>
 <body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loading-text">Carregando...</div>
+</div>
 
 <div id="app">
   <div class="header">
@@ -311,9 +250,8 @@
 
       <div class="card">
         <h2>Selecionar Horário</h2>
-        <p class="hint">Digite diretamente nos campos de horário <strong>ou</strong> clique nos botões abaixo para selecionar o início e o fim da sua reserva.</p>
+        <p class="hint">Digite o horário desejado nos campos abaixo <strong>ou</strong> clique nos botões para selecionar início e fim.</p>
 
-        <!-- CAMPOS HORA INICIO / FIM -->
         <div class="time-picker-wrap">
           <div class="time-picker-group">
             <label>⏱ Hora de Início</label>
@@ -329,7 +267,6 @@
 
         <div class="divider-label">ou selecione clicando nos horários</div>
 
-        <!-- LEGENDA -->
         <div class="legend">
           <div class="legend-item"><div class="legend-dot" style="background:var(--pa-light-green);border:2px solid #c5e0c1"></div>Disponível</div>
           <div class="legend-item"><div class="legend-dot" style="background:var(--pa-green)"></div>Início / Fim</div>
@@ -343,9 +280,7 @@
           <div class="slots-grid" id="slots-grid"></div>
         </div>
 
-        <div class="sel-info" id="sel-info">
-          <div id="sel-text"></div>
-        </div>
+        <div class="sel-info" id="sel-info"><div id="sel-text"></div></div>
       </div>
 
       <div id="success-box" class="success-box">
@@ -439,6 +374,37 @@
 </div>
 
 <script>
+/* ========== SUPABASE CONFIG ========== */
+const SUPABASE_URL = 'https://ipzmikumvvjlrdfwrpxy.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_uuHQtxc8qBMwJAeCkOoTgQ_HW9B5vcv';
+const HEADERS = {
+  'Content-Type': 'application/json',
+  'apikey': SUPABASE_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_KEY,
+  'Prefer': 'return=representation'
+};
+
+async function sbSelect(filters) {
+  let url = SUPABASE_URL + '/rest/v1/agendamentos?select=*&order=data.asc,hora_inicio.asc';
+  if (filters) url += '&' + filters;
+  const r = await fetch(url, { headers: HEADERS });
+  return r.json();
+}
+
+async function sbInsert(data) {
+  const r = await fetch(SUPABASE_URL + '/rest/v1/agendamentos', {
+    method: 'POST', headers: HEADERS, body: JSON.stringify(data)
+  });
+  return r.json();
+}
+
+async function sbDelete(id) {
+  await fetch(SUPABASE_URL + '/rest/v1/agendamentos?id=eq.' + id, {
+    method: 'DELETE', headers: HEADERS
+  });
+}
+
+/* ========== STATE ========== */
 const SENHA_ADMIN = "Pa123456";
 const ROOM_INFO = {
   "Sala de Reunião": "Capacidade para até 12 pessoas. Mesa oval, TV 65\", ar-condicionado, videoconferência.",
@@ -447,81 +413,99 @@ const ROOM_INFO = {
 
 let currentDate = new Date();
 let selectedRoom = "Sala de Reunião";
-let selInicio = null; // "HH:MM"
-let selFim = null;    // "HH:MM"
-let agendamentos = [];
-
-try { agendamentos = JSON.parse(localStorage.getItem('pa_agendamentos_v2') || '[]'); } catch(e) { agendamentos = []; }
+let selInicio = null;
+let selFim = null;
+let agendamentos = []; // cache local do banco
 
 const SLOT_MIN = 15;
 const START_HOUR = 7;
 
+/* ========== HELPERS ========== */
 function getTotalSlots(date) {
   const d = date.getDay();
   if (d === 0 || d === 6) return 0;
   return d === 5 ? 36 : 40;
 }
-
 function slotToTime(idx) {
   const mins = START_HOUR * 60 + idx * SLOT_MIN;
-  const h = Math.floor(mins / 60), m = mins % 60;
+  const h = Math.floor(mins/60), m = mins%60;
   return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
 }
-
 function timeToSlot(t) {
-  const [h, m] = t.split(':').map(Number);
-  return (h * 60 + m - START_HOUR * 60) / SLOT_MIN;
+  const [h,m] = t.split(':').map(Number);
+  return (h*60+m - START_HOUR*60) / SLOT_MIN;
 }
-
 function timeToMins(t) {
-  const [h, m] = t.split(':').map(Number);
-  return h * 60 + m;
+  const [h,m] = t.split(':').map(Number);
+  return h*60+m;
 }
-
 function calcDur(ini, fim) {
   const diff = timeToMins(fim) - timeToMins(ini);
-  const h = Math.floor(diff / 60), m = diff % 60;
-  return h > 0 ? (h + 'h' + (m > 0 ? m + 'min' : '')) : (m + 'min');
+  const h = Math.floor(diff/60), m = diff%60;
+  return h>0 ? (h+'h'+(m>0?m+'min':'')) : (m+'min');
 }
-
 function formatDate(d) {
   const days = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
   const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  return days[d.getDay()] + ', ' + d.getDate() + ' de ' + months[d.getMonth()] + ' de ' + d.getFullYear();
+  return days[d.getDay()]+', '+d.getDate()+' de '+months[d.getMonth()]+' de '+d.getFullYear();
+}
+function getDateStr(d) { return d.toISOString().split('T')[0]; }
+
+function showLoading(txt) {
+  document.getElementById('loading-text').textContent = txt || 'Carregando...';
+  document.getElementById('loading-overlay').classList.add('show');
+}
+function hideLoading() {
+  document.getElementById('loading-overlay').classList.remove('show');
 }
 
-function getDateStr(d) { return d.toISOString().split('T')[0]; }
+/* ========== SUPABASE DATA ========== */
+async function carregarAgendamentos() {
+  try {
+    const data = await sbSelect();
+    agendamentos = Array.isArray(data) ? data : [];
+  } catch(e) {
+    agendamentos = [];
+  }
+}
 
 function getOccupied(date, room) {
   const ds = getDateStr(date);
   const occ = new Set();
-  agendamentos.filter(a => a.data === ds && a.sala === room).forEach(a => {
-    const s = timeToSlot(a.horaInicio), e = timeToSlot(a.horaFim);
-    for (let i = s; i < e; i++) occ.add(i);
-  });
+  agendamentos
+    .filter(a => a.data === ds && a.sala === room)
+    .forEach(a => {
+      const s = timeToSlot(a.hora_inicio), e = timeToSlot(a.hora_fim);
+      for (let i = s; i < e; i++) occ.add(i);
+    });
   return occ;
 }
 
 function getNameMap(date, room) {
   const ds = getDateStr(date);
   const nm = {};
-  agendamentos.filter(a => a.data === ds && a.sala === room).forEach(a => {
-    const s = timeToSlot(a.horaInicio), e = timeToSlot(a.horaFim);
-    for (let i = s; i < e; i++) nm[i] = a.nome;
-  });
+  agendamentos
+    .filter(a => a.data === ds && a.sala === room)
+    .forEach(a => {
+      const s = timeToSlot(a.hora_inicio), e = timeToSlot(a.hora_fim);
+      for (let i = s; i < e; i++) nm[i] = a.nome;
+    });
   return nm;
 }
 
-/* ---- RENDER SLOTS ---- */
-function renderSlots() {
+/* ========== SLOTS RENDER ========== */
+async function renderSlots() {
+  showLoading('Verificando disponibilidade...');
+  await carregarAgendamentos();
+  hideLoading();
+
   const total = getTotalSlots(currentDate);
   document.getElementById('date-display').textContent = formatDate(currentDate);
 
   if (total === 0) {
     document.getElementById('weekend-msg').style.display = 'block';
     document.getElementById('slots-wrap').style.display = 'none';
-    updateSelInfo();
-    return;
+    updateSelInfo(); return;
   }
   document.getElementById('weekend-msg').style.display = 'none';
   document.getElementById('slots-wrap').style.display = 'block';
@@ -538,9 +522,8 @@ function renderSlots() {
     const time = slotToTime(i);
     const isOccupied = occupied.has(i);
     const isStart = iniSlot !== null && iniSlot === i;
-    // "end" button = the last slot INSIDE the selection (fimSlot - 1)
-    const isEnd = fimSlot !== null && fimSlot > 0 && (fimSlot - 1) === i && !isStart;
-    const inRange = iniSlot !== null && fimSlot !== null && i > iniSlot && i < fimSlot - 1;
+    const isEnd = fimSlot !== null && fimSlot > 0 && (fimSlot-1) === i && !isStart;
+    const inRange = iniSlot !== null && fimSlot !== null && i > iniSlot && i < fimSlot-1;
 
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -590,7 +573,6 @@ function renderSlots() {
 function handleSlotClick(i) {
   const occupied = getOccupied(currentDate, selectedRoom);
 
-  // Step 1: set início
   if (selInicio === null) {
     selInicio = slotToTime(i);
     selFim = null;
@@ -601,11 +583,9 @@ function handleSlotClick(i) {
     return;
   }
 
-  // Step 2: set fim
   if (selFim === null) {
     const startSlot = timeToSlot(selInicio);
     if (i <= startSlot) {
-      // clicked before or same as start: restart
       selInicio = slotToTime(i);
       selFim = null;
       document.getElementById('hora-inicio').value = selInicio;
@@ -614,21 +594,19 @@ function handleSlotClick(i) {
       renderSlots();
       return;
     }
-    // Check no conflict in range
     for (let j = startSlot; j <= i; j++) {
       if (occupied.has(j)) {
         alert('Há um horário já reservado nesse intervalo. Por favor escolha outro período.');
         return;
       }
     }
-    selFim = slotToTime(i + 1); // fim = hora do próximo slot
+    selFim = slotToTime(i+1);
     document.getElementById('hora-fim').value = selFim;
     syncStyles();
     renderSlots();
     return;
   }
 
-  // Both set: restart
   selInicio = slotToTime(i);
   selFim = null;
   document.getElementById('hora-inicio').value = selInicio;
@@ -638,27 +616,21 @@ function handleSlotClick(i) {
 }
 
 function clearSelection() {
-  selInicio = null;
-  selFim = null;
+  selInicio = null; selFim = null;
   document.getElementById('hora-inicio').value = '';
   document.getElementById('hora-fim').value = '';
-  document.getElementById('err-inicio').classList.remove('show');
-  document.getElementById('err-fim').classList.remove('show');
-  document.getElementById('hora-inicio').classList.remove('error','has-value');
-  document.getElementById('hora-fim').classList.remove('error','has-value');
+  ['err-inicio','err-fim'].forEach(id => document.getElementById(id).classList.remove('show'));
+  ['hora-inicio','hora-fim'].forEach(id => document.getElementById(id).classList.remove('error','has-value'));
   renderSlots();
 }
 
-/* ---- MANUAL TIME INPUT ---- */
+/* ========== MANUAL TIME INPUT ========== */
 function onTimeInput() {
   const iniVal = document.getElementById('hora-inicio').value;
   const fimVal = document.getElementById('hora-fim').value;
 
-  // clear errors
   ['err-inicio','err-fim'].forEach(id => document.getElementById(id).classList.remove('show'));
-  ['hora-inicio','hora-fim'].forEach(id => {
-    document.getElementById(id).classList.remove('error','has-value');
-  });
+  ['hora-inicio','hora-fim'].forEach(id => document.getElementById(id).classList.remove('error','has-value'));
 
   const total = getTotalSlots(currentDate);
   if (total === 0) return;
@@ -669,44 +641,28 @@ function onTimeInput() {
   if (iniVal) {
     const iniMins = timeToMins(iniVal);
     if (iniMins < startMins || iniMins >= endMins) {
-      showErr('err-inicio','hora-inicio','Fora do expediente (07:00 – ' + endHour + ')');
-      selInicio = null; selFim = null;
-      renderSlots(); updateBtn(); return;
+      showErr('err-inicio','hora-inicio','Fora do expediente (07:00 – '+endHour+')');
+      selInicio = null; selFim = null; renderSlots(); updateBtn(); return;
     }
     selInicio = iniVal;
     document.getElementById('hora-inicio').classList.add('has-value');
-  } else {
-    selInicio = null;
-  }
+  } else { selInicio = null; }
 
   if (fimVal && iniVal) {
     const fimMins = timeToMins(fimVal);
     const iniMins = timeToMins(iniVal);
-    if (fimMins <= iniMins) {
-      showErr('err-fim','hora-fim','Deve ser após o horário de início');
-      selFim = null; renderSlots(); updateBtn(); return;
-    }
-    if (fimMins > endMins) {
-      showErr('err-fim','hora-fim','Fora do expediente (até ' + endHour + ')');
-      selFim = null; renderSlots(); updateBtn(); return;
-    }
-    if (fimMins - iniMins < SLOT_MIN) {
-      showErr('err-fim','hora-fim','Duração mínima: 15 minutos');
-      selFim = null; renderSlots(); updateBtn(); return;
-    }
+    if (fimMins <= iniMins) { showErr('err-fim','hora-fim','Deve ser após o horário de início'); selFim=null; renderSlots(); updateBtn(); return; }
+    if (fimMins > endMins) { showErr('err-fim','hora-fim','Fora do expediente (até '+endHour+')'); selFim=null; renderSlots(); updateBtn(); return; }
+    if (fimMins - iniMins < SLOT_MIN) { showErr('err-fim','hora-fim','Duração mínima: 15 minutos'); selFim=null; renderSlots(); updateBtn(); return; }
+
     const occupied = getOccupied(currentDate, selectedRoom);
     const s = timeToSlot(selInicio), e = timeToSlot(fimVal);
     for (let j = s; j < e; j++) {
-      if (occupied.has(j)) {
-        showErr('err-fim','hora-fim','Conflito com agendamento existente');
-        selFim = null; renderSlots(); updateBtn(); return;
-      }
+      if (occupied.has(j)) { showErr('err-fim','hora-fim','Conflito com agendamento existente'); selFim=null; renderSlots(); updateBtn(); return; }
     }
     selFim = fimVal;
     document.getElementById('hora-fim').classList.add('has-value');
-  } else if (!fimVal) {
-    selFim = null;
-  }
+  } else if (!fimVal) { selFim = null; }
 
   renderSlots();
   updateBtn();
@@ -723,32 +679,31 @@ function syncStyles() {
   document.getElementById('hora-fim').classList.toggle('has-value', !!selFim);
 }
 
-/* ---- SEL INFO ---- */
+/* ========== SEL INFO ========== */
 function updateSelInfo() {
   const info = document.getElementById('sel-info');
   if (!selInicio || !selFim) { info.classList.remove('show'); return; }
   const dur = calcDur(selInicio, selFim);
   document.getElementById('sel-text').innerHTML =
-    '<strong>' + selInicio + ' até ' + selFim + '</strong> — ' + formatDate(currentDate) + '<br>' +
-    '<span style="color:#555;font-size:12px;">Duração: <span style="background:#e8f5e4;color:var(--pa-green);border-radius:4px;padding:1px 8px;font-weight:600;">' + dur + '</span> · ' + selectedRoom + '</span>';
+    '<strong>'+selInicio+' até '+selFim+'</strong> — '+formatDate(currentDate)+'<br>'+
+    '<span style="color:#555;font-size:12px;">Duração: <span style="background:#e8f5e4;color:var(--pa-green);border-radius:4px;padding:1px 8px;font-weight:600;">'+dur+'</span> · '+selectedRoom+'</span>';
   info.classList.add('show');
 }
 
-/* ---- ROOM / DATE ---- */
+/* ========== ROOM / DATE ========== */
 function selectRoom(room, el) {
   selectedRoom = room;
   document.querySelectorAll('.room-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('room-info').innerHTML = '<strong style="color:var(--pa-dark)">' + room + '</strong> — ' + ROOM_INFO[room];
+  document.getElementById('room-info').innerHTML = '<strong style="color:var(--pa-dark)">'+room+'</strong> — '+ROOM_INFO[room];
   clearSelection();
 }
 
 function changeDate(dir) {
-  currentDate.setDate(currentDate.getDate() + dir);
+  currentDate.setDate(currentDate.getDate()+dir);
   clearSelection();
 }
 
-/* ---- CONFIRM BTN ---- */
 function updateBtn() {
   const nome = document.getElementById('nome').value.trim();
   const email = document.getElementById('email').value.trim();
@@ -757,26 +712,26 @@ function updateBtn() {
   document.getElementById('btn-confirmar').disabled = !(nome && email && setor && dep && selInicio && selFim);
 }
 
-/* ---- BOOKING ---- */
+/* ========== BOOKING ========== */
 function confirmarAgendamento() {
   const dur = calcDur(selInicio, selFim);
   document.getElementById('confirm-details').innerHTML =
-    '<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;">' +
-    '<span style="color:#888">Solicitante</span><span><strong>' + document.getElementById('nome').value.trim() + '</strong></span>' +
-    '<span style="color:#888">E-mail</span><span>' + document.getElementById('email').value.trim() + '</span>' +
-    '<span style="color:#888">Setor</span><span>' + document.getElementById('setor').value + ' — ' + document.getElementById('departamento').value.trim() + '</span>' +
-    '<span style="color:#888">Sala</span><span><strong>' + selectedRoom + '</strong></span>' +
-    '<span style="color:#888">Data</span><span>' + formatDate(currentDate) + '</span>' +
-    '<span style="color:#888">Horário</span><span><strong>' + selInicio + ' às ' + selFim + '</strong></span>' +
-    '<span style="color:#888">Duração</span><span><strong>' + dur + '</strong></span>' +
+    '<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;">'+
+    '<span style="color:#888">Solicitante</span><span><strong>'+document.getElementById('nome').value.trim()+'</strong></span>'+
+    '<span style="color:#888">E-mail</span><span>'+document.getElementById('email').value.trim()+'</span>'+
+    '<span style="color:#888">Setor</span><span>'+document.getElementById('setor').value+' — '+document.getElementById('departamento').value.trim()+'</span>'+
+    '<span style="color:#888">Sala</span><span><strong>'+selectedRoom+'</strong></span>'+
+    '<span style="color:#888">Data</span><span>'+formatDate(currentDate)+'</span>'+
+    '<span style="color:#888">Horário</span><span><strong>'+selInicio+' às '+selFim+'</strong></span>'+
+    '<span style="color:#888">Duração</span><span><strong>'+dur+'</strong></span>'+
     '</div>';
   document.getElementById('confirm-modal').classList.add('open');
 }
 
-function finalizarAgendamento() {
+async function finalizarAgendamento() {
+  showLoading('Salvando agendamento...');
   const dur = calcDur(selInicio, selFim);
-  const ag = {
-    id: Date.now(),
+  const payload = {
     nome: document.getElementById('nome').value.trim(),
     email: document.getElementById('email').value.trim(),
     setor: document.getElementById('setor').value,
@@ -785,56 +740,72 @@ function finalizarAgendamento() {
     participantes: document.getElementById('participantes').value || '-',
     sala: selectedRoom,
     data: getDateStr(currentDate),
-    dataFormatada: formatDate(currentDate),
-    horaInicio: selInicio,
-    horaFim: selFim,
+    hora_inicio: selInicio,
+    hora_fim: selFim,
     duracao: dur,
+    data_formatada: formatDate(currentDate),
     timestamp: new Date().toLocaleString('pt-BR')
   };
-  agendamentos.push(ag);
-  localStorage.setItem('pa_agendamentos_v2', JSON.stringify(agendamentos));
-  document.getElementById('confirm-modal').classList.remove('open');
 
-  const sb = document.getElementById('success-box');
-  sb.classList.add('show');
-  document.getElementById('success-detail').textContent = 'Reserva da ' + selectedRoom + ' confirmada com sucesso!';
-  document.getElementById('success-chips').innerHTML =
-    '<div class="info-chip">📅 ' + ag.dataFormatada + '</div>' +
-    '<div class="info-chip">🕐 ' + ag.horaInicio + ' – ' + ag.horaFim + '</div>' +
-    '<div class="info-chip">⏱ ' + ag.duracao + '</div>';
-  sb.scrollIntoView({ behavior: 'smooth' });
-  clearSelection();
-  setTimeout(() => sb.classList.remove('show'), 9000);
+  try {
+    const result = await sbInsert(payload);
+    hideLoading();
+    document.getElementById('confirm-modal').classList.remove('open');
+
+    if (result && !result.error) {
+      const sb = document.getElementById('success-box');
+      sb.classList.add('show');
+      document.getElementById('success-detail').textContent = 'Reserva da '+selectedRoom+' confirmada com sucesso!';
+      document.getElementById('success-chips').innerHTML =
+        '<div class="info-chip">📅 '+payload.data_formatada+'</div>'+
+        '<div class="info-chip">🕐 '+payload.hora_inicio+' – '+payload.hora_fim+'</div>'+
+        '<div class="info-chip">⏱ '+payload.duracao+'</div>';
+      sb.scrollIntoView({ behavior:'smooth' });
+      clearSelection();
+      setTimeout(() => sb.classList.remove('show'), 9000);
+    } else {
+      alert('Erro ao salvar agendamento. Por favor tente novamente.');
+    }
+  } catch(e) {
+    hideLoading();
+    alert('Erro de conexão. Verifique sua internet e tente novamente.');
+  }
 }
 
-/* ---- TABS ---- */
+/* ========== TABS ========== */
 function showTab(tab, event) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + tab).classList.add('active');
+  document.getElementById('page-'+tab).classList.add('active');
   event.target.classList.add('active');
 }
 
-/* ---- MEUS AGENDAMENTOS ---- */
-function buscarMeus() {
+/* ========== MEUS AGENDAMENTOS ========== */
+async function buscarMeus() {
   const email = document.getElementById('busca-email').value.trim().toLowerCase();
-  const res = agendamentos.filter(a => a.email.toLowerCase() === email);
-  const container = document.getElementById('meus-resultado');
-  if (!email) { container.innerHTML = '<p style="color:#888;font-size:13px;padding:12px 0;">Digite seu e-mail para buscar.</p>'; return; }
-  if (res.length === 0) {
-    container.innerHTML = '<div class="card" style="text-align:center;color:#888;font-size:13px;padding:32px;">Nenhum agendamento encontrado para este e-mail.</div>'; return;
+  if (!email) { document.getElementById('meus-resultado').innerHTML = '<p style="color:#888;font-size:13px;padding:12px 0;">Digite seu e-mail para buscar.</p>'; return; }
+  showLoading('Buscando agendamentos...');
+  try {
+    const res = await sbSelect('email=eq.'+encodeURIComponent(email)+'&order=data.desc');
+    hideLoading();
+    const container = document.getElementById('meus-resultado');
+    if (!res || res.length === 0) {
+      container.innerHTML = '<div class="card" style="text-align:center;color:#888;font-size:13px;padding:32px;">Nenhum agendamento encontrado para este e-mail.</div>'; return;
+    }
+    container.innerHTML = '<div class="card"><h2>Seus agendamentos ('+res.length+')</h2>'+
+      res.map(a =>
+        '<div style="padding:12px 0;border-bottom:0.5px solid #eee;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">'+
+        '<div><strong>'+a.sala+'</strong><br><span style="color:#888;font-size:12px;">'+(a.data_formatada||a.data)+'</span></div>'+
+        '<div style="text-align:right"><strong style="color:var(--pa-green)">'+a.hora_inicio+' – '+a.hora_fim+'</strong>'+
+        '<span style="background:#e8f5e4;color:var(--pa-green);border-radius:4px;padding:1px 8px;font-size:11px;font-weight:600;margin-left:6px;">'+a.duracao+'</span><br>'+
+        '<span style="color:#888;font-size:12px;">'+a.setor+' · '+a.departamento+'</span></div></div>').join('')+'</div>';
+  } catch(e) {
+    hideLoading();
+    document.getElementById('meus-resultado').innerHTML = '<div class="card" style="color:#dc2626;font-size:13px;padding:20px;">Erro ao buscar agendamentos.</div>';
   }
-  const sorted = [...res].sort((a,b) => a.data > b.data ? -1 : 1);
-  container.innerHTML = '<div class="card"><h2>Seus agendamentos (' + res.length + ')</h2>' +
-    sorted.map(a =>
-      '<div style="padding:12px 0;border-bottom:0.5px solid #eee;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">' +
-      '<div><strong>' + a.sala + '</strong><br><span style="color:#888;font-size:12px;">' + a.dataFormatada + '</span></div>' +
-      '<div style="text-align:right"><strong style="color:var(--pa-green)">' + a.horaInicio + ' – ' + a.horaFim + '</strong>' +
-      '<span style="background:#e8f5e4;color:var(--pa-green);border-radius:4px;padding:1px 8px;font-size:11px;font-weight:600;margin-left:6px;">' + a.duracao + '</span><br>' +
-      '<span style="color:#888;font-size:12px;">' + a.setor + ' · ' + a.departamento + '</span></div></div>').join('') + '</div>';
 }
 
-/* ---- ADMIN ---- */
+/* ========== ADMIN ========== */
 function openAdminModal() {
   document.getElementById('admin-modal').classList.add('open');
   document.getElementById('admin-senha').value = '';
@@ -843,12 +814,16 @@ function openAdminModal() {
 }
 function closeAdminModal() { document.getElementById('admin-modal').classList.remove('open'); }
 
-function verificarSenha() {
+async function verificarSenha() {
   if (document.getElementById('admin-senha').value === SENHA_ADMIN) {
     closeAdminModal();
     document.getElementById('app').style.display = 'none';
     document.getElementById('admin-panel').style.display = 'block';
-    renderAdminStats(); renderAdminTable();
+    showLoading('Carregando painel...');
+    await carregarAgendamentos();
+    hideLoading();
+    renderAdminStats();
+    renderAdminTable();
   } else {
     document.getElementById('admin-error').style.display = 'block';
     document.getElementById('admin-senha').value = '';
@@ -865,9 +840,9 @@ function sairAdmin() {
 function renderAdminStats() {
   const hoje = getDateStr(new Date());
   document.getElementById('stats-row').innerHTML =
-    '<div class="stat-card"><div class="stat-num">' + agendamentos.length + '</div><div class="stat-label">Total de Agendamentos</div></div>' +
-    '<div class="stat-card"><div class="stat-num">' + agendamentos.filter(a=>a.data===hoje).length + '</div><div class="stat-label">Agendamentos Hoje</div></div>' +
-    '<div class="stat-card"><div class="stat-num" style="color:var(--pa-gold)">' + agendamentos.filter(a=>a.sala==='Sala de Reunião').length + ' / ' + agendamentos.filter(a=>a.sala==='Auditório').length + '</div><div class="stat-label">Sala / Auditório</div></div>';
+    '<div class="stat-card"><div class="stat-num">'+agendamentos.length+'</div><div class="stat-label">Total de Agendamentos</div></div>'+
+    '<div class="stat-card"><div class="stat-num">'+agendamentos.filter(a=>a.data===hoje).length+'</div><div class="stat-label">Agendamentos Hoje</div></div>'+
+    '<div class="stat-card"><div class="stat-num" style="color:var(--pa-gold)">'+agendamentos.filter(a=>a.sala==='Sala de Reunião').length+' / '+agendamentos.filter(a=>a.sala==='Auditório').length+'</div><div class="stat-label">Sala / Auditório</div></div>';
 }
 
 function renderAdminTable() {
@@ -879,9 +854,9 @@ function renderAdminTable() {
     if (filtSala && a.sala !== filtSala) return false;
     if (filtNome && !a.nome.toLowerCase().includes(filtNome) && !a.email.toLowerCase().includes(filtNome)) return false;
     return true;
-  }).sort((a,b) => a.data > b.data ? -1 : a.data < b.data ? 1 : a.horaInicio > b.horaInicio ? 1 : -1);
+  }).sort((a,b) => a.data > b.data ? -1 : a.data < b.data ? 1 : a.hora_inicio > b.hora_inicio ? 1 : -1);
 
-  document.getElementById('total-badge').textContent = filtered.length + ' registro(s)';
+  document.getElementById('total-badge').textContent = filtered.length+' registro(s)';
   const tbody = document.getElementById('admin-tbody');
   const noRes = document.getElementById('no-results');
   if (filtered.length === 0) {
@@ -889,34 +864,37 @@ function renderAdminTable() {
   } else {
     noRes.style.display = 'none';
     tbody.innerHTML = filtered.map((a,i) =>
-      '<tr>' +
-      '<td style="color:#888">' + (i+1) + '</td>' +
-      '<td><strong>' + a.nome + '</strong></td>' +
-      '<td style="color:var(--pa-green)">' + a.email + '</td>' +
-      '<td>' + a.setor + '</td>' +
-      '<td>' + a.departamento + '</td>' +
-      '<td><span class="tag ' + (a.sala==='Auditório'?'tag-auditorio':'tag-sala') + '">' + a.sala + '</span></td>' +
-      '<td>' + (a.dataFormatada||a.data) + '</td>' +
-      '<td><strong>' + a.horaInicio + '</strong></td>' +
-      '<td><strong>' + a.horaFim + '</strong></td>' +
-      '<td><span style="background:#e8f5e4;color:var(--pa-green);border-radius:4px;padding:2px 8px;font-size:11px;font-weight:600;">' + a.duracao + '</span></td>' +
-      '<td style="text-align:center">' + a.participantes + '</td>' +
-      '<td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="' + a.finalidade + '">' + a.finalidade + '</td>' +
-      '<td><button class="btn-delete" onclick="cancelarAgendamento(' + a.id + ')">Cancelar</button></td>' +
+      '<tr>'+
+      '<td style="color:#888">'+(i+1)+'</td>'+
+      '<td><strong>'+a.nome+'</strong></td>'+
+      '<td style="color:var(--pa-green)">'+a.email+'</td>'+
+      '<td>'+a.setor+'</td>'+
+      '<td>'+a.departamento+'</td>'+
+      '<td><span class="tag '+(a.sala==='Auditório'?'tag-auditorio':'tag-sala')+'">'+a.sala+'</span></td>'+
+      '<td>'+(a.data_formatada||a.data)+'</td>'+
+      '<td><strong>'+a.hora_inicio+'</strong></td>'+
+      '<td><strong>'+a.hora_fim+'</strong></td>'+
+      '<td><span style="background:#e8f5e4;color:var(--pa-green);border-radius:4px;padding:2px 8px;font-size:11px;font-weight:600;">'+a.duracao+'</span></td>'+
+      '<td style="text-align:center">'+a.participantes+'</td>'+
+      '<td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+a.finalidade+'">'+a.finalidade+'</td>'+
+      '<td><button class="btn-delete" onclick="cancelarAgendamento('+a.id+')">Cancelar</button></td>'+
       '</tr>').join('');
   }
 }
 
-function cancelarAgendamento(id) {
+async function cancelarAgendamento(id) {
   if (!confirm('Deseja cancelar este agendamento?')) return;
-  agendamentos = agendamentos.filter(a => a.id !== id);
-  localStorage.setItem('pa_agendamentos_v2', JSON.stringify(agendamentos));
-  renderAdminStats(); renderAdminTable(); renderSlots();
+  showLoading('Cancelando...');
+  await sbDelete(id);
+  await carregarAgendamentos();
+  hideLoading();
+  renderAdminStats();
+  renderAdminTable();
 }
 
 function exportarCSV() {
   const headers = ['Nome','Email','Setor','Departamento','Sala','Data','Início','Fim','Duração','Participantes','Finalidade'];
-  const rows = agendamentos.map(a => [a.nome,a.email,a.setor,a.departamento,a.sala,a.data,a.horaInicio,a.horaFim,a.duracao,a.participantes,a.finalidade].map(v=>'"'+v+'"').join(','));
+  const rows = agendamentos.map(a => [a.nome,a.email,a.setor,a.departamento,a.sala,a.data,a.hora_inicio,a.hora_fim,a.duracao,a.participantes,a.finalidade].map(v=>'"'+(v||'')+'"').join(','));
   const csv = [headers.join(','),...rows].join('\n');
   const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
