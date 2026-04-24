@@ -654,13 +654,13 @@ async function carregarColaboradores() {
   const { data, error } = await sb.from('colaboradores').select('*').order('nome', {ascending:true});
   if (error) { hideLoading(); alert('Erro: '+error.message); return; }
   colaboradores = data || [];
-  // Load docs for all collaborators to show progress
+  docsMap = {};
   if(colaboradores.length > 0) {
     const ids = colaboradores.map(c=>c.id);
     const { data: docsData } = await sb.from('documentos').select('*').in('colaborador_id', ids);
     (docsData||[]).forEach(d => {
       if(!docsMap[d.colaborador_id]) docsMap[d.colaborador_id]=[];
-      if(!docsMap[d.colaborador_id].find(x=>x.id===d.id)) docsMap[d.colaborador_id].push(d);
+      docsMap[d.colaborador_id].push(d);
     });
   }
   hideLoading();
@@ -891,10 +891,10 @@ async function recarregarDetalhe() {
   hideLoading();
   renderDetalhe();
 }
-function voltarLista() {
+async function voltarLista() {
   document.getElementById('view-detail').style.display = 'none';
   document.getElementById('view-lista').style.display = '';
-  renderLista();
+  await carregarColaboradores();
 }
 
 function renderDetalhe() {
