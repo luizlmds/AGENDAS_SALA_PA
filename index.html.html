@@ -742,25 +742,28 @@ function renderLista(filtro='', filtroCC='', filtroFuncao='') {
 
 function calcPct(colabId) {
   const docs = docsMap[colabId] || [];
-  const total = DOCS.filter(d => {
+  let total = 0, ok = 0;
+  DOCS.forEach(d => {
     const found = docs.find(x => x.doc_id === d.id);
-    return !found || !found.na;
-  }).length;
-  const ok = docs.filter(x => x.status === 'ok').length;
+    if(found && found.na) return; // skip N/A
+    total++;
+    if(found && found.status === 'ok') ok++;
+  });
   return total > 0 ? Math.round(ok / total * 100) : 0;
 }
 
 function calcEnviado(colabId) {
   const docs = docsMap[colabId] || [];
-  const total = DOCS.filter(d => {
+  let total = 0, enviados = 0;
+  DOCS.forEach(d => {
     const found = docs.find(x => x.doc_id === d.id);
-    return !found || !found.na;
-  }).length;
-  const enviados = docs.filter(x => x.status === 'analysis' || x.status === 'ok').length;
+    if(found && found.na) return;
+    total++;
+    if(found && (found.status === 'analysis' || found.status === 'ok')) enviados++;
+  });
   return total > 0 ? Math.round(enviados / total * 100) : 0;
 }
 
-// =============================================
 // TABS E FORM
 // =============================================
 function mudarTab(t) {
@@ -1179,10 +1182,12 @@ function hideLoading() { document.getElementById('loading-overlay').style.displa
 async function pdfParaImagens(url) {
   try {
     if(!window.pdfjsLib) {
-      await new Promise((res,rej)=>{ const s=document.createElement('script');
+      await new Promise((res,rej)=>{
+        const s=document.createElement('script');
         s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
         s.onload=()=>{ window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(); };
-        s.onerror=rej; document.head.appendChild(s); });
+        s.onerror=rej; document.head.appendChild(s);
+      });
     }
     const resp = await fetch(url);
     const buf = await resp.arrayBuffer();
@@ -1197,7 +1202,13 @@ async function pdfParaImagens(url) {
       imgs.push(canvas.toDataURL('image/jpeg',0.92));
     }
     return imgs;
-  } catch(e) { console.error('PDF.js:',e); return null; }
+  } catch(e) { console.error('PDF.js:',e); return []; }
+}
+
+async function fileParaBase64(url) {
+  const resp = await fetch(url);
+  const blob = await resp.blob();
+  return new Promise(res=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.readAsDataURL(blob); });
 }
 
 async function baixarDossie() {
@@ -1213,63 +1224,67 @@ async function baixarDossie() {
   }
   if(!todosArquivos.length) { alert('Nenhum documento foi enviado ainda.'); return; }
 
-  showLoading('Convertendo arquivos...');
+  showLoading('Preparando dossiê...');
   try {
     const c = currentColab;
     const dataGeracao = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-
-    // Converter todos para base64 imagens
-    const processados = [];
-    for(let i=0;i<todosArquivos.length;i++) {
-      const item = todosArquivos[i];
-      document.getElementById('loading-msg').textContent = `Convertendo ${i+1} de ${todosArquivos.length}...`;
-      const isPdf = /\.pdf$/i.test(item.arquivo.nome);
-      const isImg = /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(item.arquivo.nome);
-      let imagens = [];
-      if(isPdf) {
-        const imgs = await pdfParaImagens(item.arquivo.url);
-        imagens = imgs||[];
-      } else if(isImg) {
-        try {
-          const resp = await fetch(item.arquivo.url);
-          const blob = await resp.blob();
-          const b64 = await new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(blob);});
-          imagens = [b64];
-        } catch(e){ imagens=[]; }
-      }
-      processados.push({...item, imagens});
-    }
-
-    document.getElementById('loading-msg').textContent = 'Gerando PDF...';
-
-    // Carregar html2pdf
-    if(!window.html2pdf) {
-      await new Promise((res,rej)=>{ const s=document.createElement('script');
-        s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-        s.onload=res; s.onerror=rej; document.head.appendChild(s); });
-    }
-
-    // Montar HTML do dossiê
     const nomeArq = c.nome.replace(/\s+/g,'_');
     const dataArq = new Date().toISOString().slice(0,10);
 
-    const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'font-family:Arial,sans-serif;color:#1c1c1a;width:190mm;';
+    // Carregar html2pdf
+    if(!window.html2pdf) {
+      document.getElementById('loading-msg').textContent = 'Carregando biblioteca PDF...';
+      await new Promise((res,rej)=>{
+        const s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+        s.onload=res; s.onerror=rej; document.head.appendChild(s);
+      });
+    }
 
-    // Capa
-    wrapper.innerHTML = `
-      <div style="background:#1a3a2a;color:white;padding:16px 20px;border-radius:6px;margin-bottom:20px;display:flex;align-items:center;gap:14px;">
-        <div style="font-size:28px;font-weight:900;letter-spacing:-1px;">PA</div>
-        <div><div style="font-size:14px;font-weight:bold;">Parente Andrade</div><div style="font-size:11px;opacity:0.8;">Dossie de Documentacao</div></div>
+    // Converter todos arquivos para base64
+    const processados = [];
+    for(let i=0;i<todosArquivos.length;i++) {
+      const item = todosArquivos[i];
+      document.getElementById('loading-msg').textContent = `Convertendo ${i+1} de ${todosArquivos.length}: ${item.arquivo.nome}`;
+      const isPdf = /\.pdf$/i.test(item.arquivo.nome);
+      const isImg = /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(item.arquivo.nome);
+      let imagens = [];
+      try {
+        if(isPdf) {
+          imagens = await pdfParaImagens(item.arquivo.url);
+        } else if(isImg) {
+          const b64 = await fileParaBase64(item.arquivo.url);
+          imagens = [b64];
+        } else {
+          // Tenta como imagem, se falhar como PDF
+          try {
+            const b64 = await fileParaBase64(item.arquivo.url);
+            imagens = [b64];
+          } catch(e) {
+            imagens = await pdfParaImagens(item.arquivo.url);
+          }
+        }
+      } catch(e) { console.error('Erro convertendo',item.arquivo.nome,e); }
+      processados.push({...item, imagens});
+    }
+
+    document.getElementById('loading-msg').textContent = 'Montando PDF...';
+
+    // Montar HTML
+    const div = document.createElement('div');
+    div.style.cssText = 'font-family:Arial,sans-serif;width:190mm;background:white;';
+
+    div.innerHTML = `
+      <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#1a3a2a;color:white;padding:16px 20px;border-radius:6px;margin-bottom:20px;">
+        <div style="font-size:22px;font-weight:900;letter-spacing:-1px;display:inline;margin-right:12px;">PA</div>
+        <span style="font-size:13px;font-weight:bold;">Parente Andrade — Dossiê de Documentação</span>
       </div>
-      <div style="margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #1a3a2a;">
-        <div style="font-size:20px;font-weight:bold;color:#1a3a2a;margin-bottom:10px;">${c.nome}</div>
-        <div style="font-size:11px;color:#555;line-height:2;">
-          Funcao: <b>${c.funcao}</b><br>
-          Centro de Custo: <b>${c.centro_custo}</b><br>
-          CPF: <b>${c.cpf}</b><br>
-          Gerado em: <b>${dataGeracao}</b><br>
-          Total de arquivos: <b>${processados.length}</b>
+      <div style="margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #1a3a2a;">
+        <div style="font-size:18px;font-weight:bold;color:#1a3a2a;margin-bottom:8px;">${c.nome}</div>
+        <div style="font-size:11px;color:#555;line-height:1.9;">
+          Função: <b>${c.funcao}</b> &nbsp;·&nbsp; Centro de Custo: <b>${c.centro_custo}</b><br>
+          CPF: <b>${c.cpf}</b> &nbsp;·&nbsp; Gerado em: <b>${dataGeracao}</b><br>
+          Total de documentos: <b>${processados.length}</b>
         </div>
       </div>`;
 
@@ -1278,55 +1293,54 @@ async function baixarDossie() {
       num++;
       for(let pi=0;pi<item.imagens.length;pi++) {
         const img = item.imagens[pi];
+        const pg = item.imagens.length>1 ? ` (pág. ${pi+1}/${item.imagens.length})` : '';
         const pageDiv = document.createElement('div');
-        pageDiv.style.cssText = 'page-break-before:always;margin-top:0;';
-        const pageLabel = item.imagens.length>1 ? ` — Pag ${pi+1}/${item.imagens.length}` : '';
+        pageDiv.style.cssText = 'page-break-before:always;padding-top:2px;';
         pageDiv.innerHTML = `
-          <div style="background:#1a3a2a;color:white;padding:8px 12px;border-radius:5px;margin-bottom:10px;">
-            <div style="font-size:9px;opacity:0.75;">Documento ${num} de ${processados.length}${pageLabel}</div>
-            <div style="font-size:11px;font-weight:bold;">${item.docNome}</div>
+          <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#1a3a2a;color:white;padding:8px 12px;border-radius:5px;margin-bottom:10px;">
+            <div style="font-size:9px;opacity:0.7;">Documento ${num}/${processados.length}${pg}</div>
+            <div style="font-size:11px;font-weight:bold;line-height:1.3;">${item.docNome}</div>
           </div>
-          <img src="${img}" style="width:100%;height:auto;display:block;border:1px solid #eee;border-radius:3px;">`;
-        wrapper.appendChild(pageDiv);
+          <img src="${img}" style="width:100%;height:auto;display:block;">`;
+        div.appendChild(pageDiv);
       }
       if(item.imagens.length===0) {
         const pageDiv = document.createElement('div');
         pageDiv.style.cssText = 'page-break-before:always;';
         pageDiv.innerHTML = `
-          <div style="background:#1a3a2a;color:white;padding:8px 12px;border-radius:5px;margin-bottom:10px;">
-            <div style="font-size:9px;opacity:0.75;">Documento ${num} de ${processados.length}</div>
+          <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#1a3a2a;color:white;padding:8px 12px;border-radius:5px;margin-bottom:10px;">
+            <div style="font-size:9px;opacity:0.7;">Documento ${num}/${processados.length}</div>
             <div style="font-size:11px;font-weight:bold;">${item.docNome}</div>
           </div>
-          <div style="border:1px solid #1d9e75;border-radius:5px;padding:12px;background:#e1f5ee;color:#0f6e56;font-size:11px;">
-            Nao foi possivel converter este arquivo automaticamente.<br>
-            Acesse o original em: <a href="${item.arquivo.url}">${item.arquivo.nome}</a>
+          <div style="border:1px solid #1d9e75;padding:12px;border-radius:5px;background:#e1f5ee;color:#0f6e56;font-size:11px;">
+            Arquivo: <b>${item.arquivo.nome}</b><br>
+            Não foi possível converter este arquivo.<br>
+            <a href="${item.arquivo.url}" target="_blank">Clique aqui para acessar</a>
           </div>`;
-        wrapper.appendChild(pageDiv);
+        div.appendChild(pageDiv);
       }
     }
 
     // Rodapé
-    const rodape = document.createElement('div');
-    rodape.innerHTML = `<div style="margin-top:20px;padding-top:8px;border-top:1px solid #ddd;font-size:9px;color:#aaa;text-align:center;">
-      Parente Andrade — Sistema de Controle de Documentacao — ${dataGeracao}</div>`;
-    wrapper.appendChild(rodape);
+    const rod = document.createElement('div');
+    rod.innerHTML = `<div style="margin-top:16px;padding-top:8px;border-top:1px solid #ddd;font-size:9px;color:#aaa;text-align:center;">
+      Parente Andrade — Sistema de Controle de Documentação — ${dataGeracao}</div>`;
+    div.appendChild(rod);
 
-    // Gerar PDF com html2pdf
-    const opt = {
-      margin: [10,10,10,10],
-      filename: `Dossie_${nomeArq}_${dataArq}.pdf`,
-      image: { type:'jpeg', quality:0.95 },
-      html2canvas: { scale:2, useCORS:true, logging:false },
-      jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
-      pagebreak: { mode:['css','legacy'] }
-    };
-    await html2pdf().set(opt).from(wrapper).save();
+    // Gerar PDF
+    await html2pdf().set({
+      margin:[10,10,10,10],
+      filename:`Dossie_${nomeArq}_${dataArq}.pdf`,
+      image:{type:'jpeg',quality:0.95},
+      html2canvas:{scale:2,useCORS:true,logging:false,allowTaint:true},
+      jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+      pagebreak:{mode:['css','legacy']}
+    }).from(div).save();
 
-  } catch(e){ alert('Erro ao gerar PDF: '+e.message); console.error(e); }
+  } catch(e){ alert('Erro: '+e.message); console.error(e); }
   hideLoading();
 }
 
-// =============================================
 // START
 // =============================================
 init();
